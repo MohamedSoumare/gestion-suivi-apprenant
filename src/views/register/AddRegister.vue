@@ -37,23 +37,15 @@
         >
       </div>
       <div class="mb-3">
-        <label for="payer" class="form-label">Payer</label>
-        <input type="text"
+        <label for="mount" class="form-label">Mount</label>
+        <input type="number"
           class="form-control"
-          id="payer"
+          id="mount"
           
           required
         >
       </div>
-      <div class="mb-3">
-        <label for="numberpayer" class="form-label">Payer Number</label>
-        <input type="text"
-          class="form-control"
-          id="numberpayer"
-          
-          required
-        >
-      </div>
+      
       <div class="mb-3">
         <label for="student" class="form-label">Student</label>
         <select class="form-select" aria-label="Default select example">

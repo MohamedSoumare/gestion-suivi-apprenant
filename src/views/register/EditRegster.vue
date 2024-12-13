@@ -38,19 +38,10 @@
         >
       </div>
       <div class="mb-3">
-        <label for="payer" class="form-label">Payer</label>
-        <input type="text"
+        <label for="mount" class="form-label">Mount</label>
+        <input type="number"
           class="form-control"
-          id="payer"
-          
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="numberpayer" class="form-label">Payer Number</label>
-        <input type="text"
-          class="form-control"
-          id="numberpayer"
+          id="mount"
           
           required
         >
