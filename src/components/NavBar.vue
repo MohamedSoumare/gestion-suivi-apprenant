@@ -11,17 +11,17 @@
             </li>
             <li class="nav-item me-4">
               <router-link class="nav-link" to="/list-register">
-                <i class="fa fa-cube" aria-hidden="true"></i> Registrations
+                <i class="fa fa-plus" aria-hidden="true"></i> Registrations
               </router-link>
             </li>
             <li class="nav-item me-4">
               <router-link class="nav-link" to="/list-payement">
-                <i class="fa fa-shopping-basket" aria-hidden="true"></i> Payements
+                <i class="fa fa-credit-card-alt" aria-hidden="true"></i> Payements
               </router-link>
             </li>
             <li class="nav-item me-4">
               <router-link class="nav-link" to="/list-module">
-                <i class="fa fa-shopping-basket" aria-hidden="true"></i> Modules
+                <i class="fa fa-book" aria-hidden="true"></i> Modules
               </router-link>
             </li>
           </ul>

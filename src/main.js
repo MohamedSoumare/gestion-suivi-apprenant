@@ -22,6 +22,8 @@ const app = createApp(App)
 const pinia = createPinia()
 import './style.css'
 import App from './App.vue'
+
+dom.watch();
 app.component('NavBar', NavBar)
 
 
