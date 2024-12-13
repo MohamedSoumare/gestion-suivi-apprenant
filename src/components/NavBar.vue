@@ -5,22 +5,22 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item me-4">
-              <router-link class="nav-link" to="/">
+              <router-link class="nav-link" to="/list-student">
                 <i class="fa fa-users" aria-hidden="true"></i> Students
               </router-link>
             </li>
             <li class="nav-item me-4">
-              <router-link class="nav-link" to="/">
+              <router-link class="nav-link" to="/list-register">
                 <i class="fa fa-cube" aria-hidden="true"></i> Registrations
               </router-link>
             </li>
             <li class="nav-item me-4">
-              <router-link class="nav-link" to="/">
+              <router-link class="nav-link" to="/list-payement">
                 <i class="fa fa-shopping-basket" aria-hidden="true"></i> Payements
               </router-link>
             </li>
             <li class="nav-item me-4">
-              <router-link class="nav-link" to="/">
+              <router-link class="nav-link" to="/list-module">
                 <i class="fa fa-shopping-basket" aria-hidden="true"></i> Modules
               </router-link>
             </li>
