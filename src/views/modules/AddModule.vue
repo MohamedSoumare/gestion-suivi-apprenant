@@ -13,7 +13,7 @@
           type="text"
           class="form-control"
           id="name"
-          
+          v-model="newModule.name"
           required
         />
       </div>
@@ -23,7 +23,7 @@
         <input type="number"
           class="form-control"
           id="duration"
-         
+         v-model="newModule.duration"
           required
         >
       </div>
@@ -32,16 +32,17 @@
         <input type="number"
           class="form-control"
           id="price"
-         
+         v-model="newModule.price"
           required
         >
       </div>
       <div class="mb-3">
         <label for="status" class="form-label">Status</label>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" v-model="newModule.status">
   <option selected>Select Status</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+  <option value="BEGINNER">BEGINNER</option>
+  <option value="INTERMEDIATE">INTERMEDIATE</option>
+  <option value="ADVANCED">ADVANCED</option>
   
 </select>
       </div>
@@ -64,48 +65,51 @@
     
 </template>
 <script setup>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 
 
-// import { ref } from 'vue';
+import { ref } from 'vue';
+import { useGestionStore } from '../../store/gestionModule';
 
-// const store = useGestionStore()
-// const router = useRouter()
-
-
-// import { defineProps, defineEmits } from 'vue';
-
-// const props = defineProps({
-//   add: Boolean
-// });
-
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
+const store = useGestionStore()
+const router = useRouter()
 
 
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
+import { defineProps, defineEmits } from 'vue';
+import { useToast } from 'vue-toastification';
+const toast = useToast()
+const props = defineProps({
+  add: Boolean
+});
+
+const emit = defineEmits(['close', "moduleAdded"]);
+
+function closeModal() {
+  emit('close'); 
+}
+
+
+ const newModule = ref({ name: "", duration: "", price: null, status: "" });
 
 
 
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-// const onSubmit = () => {
-//     store.addCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
+ const resetForm = () => {
+    newModule.value = { name: "", duration: "", price: null, status: "" }
+};
 
-// }
+const onSubmit = () => {
+  console.log(newModule.value); // Affiche correctement les données de l'étudiant
+
+  store.addModule(
+    newModule.value
+  );
+  toast.success("module added successfully !");
+  resetForm();
+
+  closeModal();
+  emit("moduleAdded")
+};
 
 
 </script>

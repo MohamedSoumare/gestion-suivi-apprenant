@@ -13,7 +13,7 @@
           type="text"
           class="form-control"
           id="name"
-          
+          v-model="newModule.name"
           required
         />
       </div>
@@ -23,7 +23,7 @@
         <input type="number"
           class="form-control"
           id="duration"
-         
+         v-model="newModule.duration"
           required
         >
       </div>
@@ -32,16 +32,17 @@
         <input type="number"
           class="form-control"
           id="price"
-         
+         v-model="newModule.price"
           required
         >
       </div>
       <div class="mb-3">
         <label for="status" class="form-label">Status</label>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" v-model="newModule.status">
   <option selected>Select Status</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+  <option value="BEGINNER">BEGINNER</option>
+  <option value="INTERMEDIATE">INTERMEDIATE</option>
+  <option value="ADVANCED">ADVANCED</option>
   
 </select>
       </div>
@@ -64,48 +65,84 @@
     
 </template>
 <script setup>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 
+import { ref,  watch, onMounted } from 'vue';
 
-// import { ref } from 'vue';
+const store = useGestionStore()
+const router = useRouter()
+import { defineProps, defineEmits } from 'vue';
+import { useGestionStore } from '../../store/gestionModule';
+import { useToast } from 'vue-toastification';
 
-// const store = useGestionStore()
-// const router = useRouter()
+const props = defineProps({
+  add: Boolean
+});
 
+const emit = defineEmits(['close', "ModuleAdded"]);
 
-// import { defineProps, defineEmits } from 'vue';
-
-// const props = defineProps({
-//   add: Boolean
-// });
-
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
-
-
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
+function closeModal() {
+  emit('close'); 
+}
 
 
+const newModule = ref({ name: "", duration: "", price: null, status: "" });
+const toast = useToast()
 
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-// const onSubmit = () => {
-//     store.addCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
+const editModule = (module) => {
+  
+    
+    newModule.value = { ...module };
+    
+  
+};
 
-// }
+onMounted(() => {
+  if (store.currentIndex !== null && store.currentIndex >= 0 && store.currentIndex < store.modules.length) {
+    editModule(store.modules[store.currentIndex]);
+  }
+});
+
+  watch(() => store.currentIndex, (newIndex) => {
+    if (newIndex !== null && newIndex >= 0 && newIndex < store.modules.length) {
+      editModule(store.modules[newIndex]);
+    }
+  });
+
+const resetForm = () => {
+    newModule.value =  ref({ name: "", duration: "", price: null, status: "" });
+}
+
+const onSubmit = async () => {
+  try {
+    console.log(newModule.value.id);
+    
+    
+    
+
+    await store.updateModule(newModule.value.id, 
+      {
+        name: newModule.value.name,
+        duration: newModule.value.duration,
+        price: newModule.value.price,
+        status: newModule.value.status,
+     
+      
+      }
+    );
+
+    toast.success("Module modifié avec succès");
+    resetForm();
+    closeModal();
+    emit("moduleAdded")
+  } catch (error) {
+    if (error.response && error.response.data.errors) {
+      serverErrors.value = error.response.data.errors;
+    }
+    toast.error("Erreur lors de la mise à jour du module : " + error.message);
+  }
+};
 
 
 </script>
