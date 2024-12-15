@@ -70,10 +70,10 @@ import { useRouter } from 'vue-router';
 
 import { ref,  watch, onMounted } from 'vue';
 
-const store = useGestionStore()
+const store = useGestionModuleStore()
 const router = useRouter()
 import { defineProps, defineEmits } from 'vue';
-import { useGestionStore } from '../../store/gestionModule';
+import { useGestionModuleStore } from '../../store/gestionModule';
 import { useToast } from 'vue-toastification';
 
 const props = defineProps({

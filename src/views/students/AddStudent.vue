@@ -89,9 +89,9 @@ import { useRouter } from 'vue-router';
 
 
 import { ref } from 'vue';
-import { useGestionStore } from '../../store/gestionStudent';
+import { useGestionStudentStore } from '../../store/gestionStudent';
 
-const store = useGestionStore()
+const store = useGestionStudentStore()
 const router = useRouter()
 
 

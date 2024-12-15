@@ -1,134 +1,150 @@
 <template>
-    <div class="modal-overlay">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Create new Registration</h5>
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new Registration</h5>
+      </div>
+      <div class="modal-body">
+        <form @submit.prevent="onSubmit">
           
-        </div>
-        <div class="modal-body">
-    <form @submit.prevent="onSubmit">
-      <div class="mb-3">
-        <label for="date" class="form-label">Registration date</label>
-        <input
-          type="date"
-          class="form-control"
-          id="date"
-          
-          required
-        />
-      </div>
-     
-      <div class="mb-3">
-        <label for="startdate" class="form-label">Start Date</label>
-        <input type="date"
-          class="form-control"
-          id="startdate"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="enddate" class="form-label">End Date</label>
-        <input type="date"
-          class="form-control"
-          id="enddate"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="mount" class="form-label">Mount</label>
-        <input type="number"
-          class="form-control"
-          id="mount"
-          
-          required
-        >
-      </div>
-      
-      <div class="mb-3">
-        <label for="student" class="form-label">Student</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Student</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
-  
-</select>
-      </div>
-      <div class="mb-3">
-        <label for="module" class="form-label">Module</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Module</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
-  
-</select>
-      </div>
-      
-     
-      
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary">
-             Confirm
-          </button>
-        </div>
-    </form>
-        </div>
-        
-        
+
+          <div class="mb-3">
+            <label for="startdate" class="form-label">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="startdate"
+              v-model="newRegistration.startDate"
+              required
+            />
+          </div>
+          <!-- <div class="mb-3">
+            <label for="enddate" class="form-label">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="enddate"
+              v-model="newRegistration.endDate"
+              required
+            />
+          </div> -->
+          <div class="mb-3">
+            <label for="mount" class="form-label">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="mount"
+              v-model="newRegistration.amount"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="student" class="form-label">Student</label>
+            <select
+              class="form-select"
+              v-model="newRegistration.studentId"
+              required
+            >
+              <option value="" disabled>Select Student</option>
+              <option v-for="student in students" :key="student.id" :value="student.id">
+                {{ student.fullName }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="module" class="form-label">Module</label>
+            <select
+              class="form-select"
+              v-model="newRegistration.moduleId"
+              required
+            >
+              <option value="" disabled>Select Module</option>
+              <option v-for="module in modules" :key="module.id" :value="module.id">
+                {{ module.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeModal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Confirm
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-    
+  </div>
 </template>
+
 <script setup>
-// import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 
 
 
-// import { ref } from 'vue';
+import { useGestionModuleStore } from '../../store/gestionModule';
+import { useGestionStore } from '../../store/gestionRegister';
+import { useToast } from 'vue-toastification';
+import { useGestionStudentStore } from '../../store/gestionStudent';
 
-// const store = useGestionStore()
-// const router = useRouter()
+const storeModule = useGestionModuleStore()
+const store = useGestionStore();
+const toast = useToast();
 
+const emit = defineEmits(['close', 'registrationAdded']);
+const storeStudent = useGestionStudentStore()
+const students = ref([]);
+const modules = ref([]);
 
-// import { defineProps, defineEmits } from 'vue';
+const newRegistration = ref({
+  date: new Date(),
+  startDate: '',
+  
+  amount: '',
+  studentId: '',
+  moduleId: '',
+});
 
-// const props = defineProps({
-//   add: Boolean
-// });
+function closeModal() {
+  emit('close');
+}
 
-// const emit = defineEmits(['close']);
+const resetForm = () => {
+  newRegistration.value = {
+    date: '',
+    startDate: '',
+    
+    amount: '',
+    studentId: '',
+    moduleId: '',
+  };
+};
 
-// function closeModal() {
-//   emit('close'); 
-// }
+const onSubmit = () => {
+  console.log(newRegistration.value);
 
+  store.addRegistration(newRegistration.value);
+  toast.success('Registration added successfully!');
+  resetForm();
+  closeModal();
+  emit('registrationAdded');
+};
 
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
+const fetchStudentsAndModules = async () => {
+  students.value = await storeStudent.fetchStudents();
+  modules.value = await storeModule.fetchModules();
+  console.log(students.value);
+  console.log(modules.value);
+  
+};
 
-
-
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-// const onSubmit = () => {
-//     store.addCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
-
-// }
-
-
+onMounted(fetchStudentsAndModules);
 </script>
+
 <style scoped>
 #carouselExampleControls .carousel-item img{
   height: 100vh;

@@ -1,48 +1,81 @@
 <script setup>
 
-// import { useRouter } from 'vue-router';
-// const router = useRouter()
-// import { useGestionStore } from '../../store/gestion';
-// import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
-// import EditCustomer from './EditCustomer.vue';
-// import AddCustomer from './AddCustomer.vue';
+import { useGestionStore } from '../../store/gestionRegister'
+import { onMounted, ref } from 'vue';
+const students = ref([])
+import AddRegister from '../register/AddRegister.vue'
+import { useToast } from 'vue-toastification';
+import EditRegister from './EditRegister.vue';
+const store = useGestionStore()
+const showDetails = ref(false);
+const selectedRegistration = ref(null);
+const add = ref(false)
+const editC = ref(false)
+const toast =useToast()
+function editCust(){
+  editC.value = true
+}
+const viewDetails = (registration) => {
+  selectedRegistration.value = registration;
+  showDetails.value = true;
+};
+function formatDate(date) {
+      if (!date) return ''; // Vérifie si la date est valide
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Intl.DateTimeFormat('fr-FR', options).format(new Date(date));
+    }
 
-// const store = useGestionStore()
+function newCust(){
+  add.value = true
+}
+function openModal(registration) {
+  selectedRegistration.value = registration;
+  
+}
 
-// const selectedCustomer = ref(null);
-// const add = ref(false)
-// const editC = ref(false)
-
-// function editCust(){
-//   editC.value = true
-// }
-
-// function newCust(){
-//   add.value = true
-// }
-// function openModal(customer) {
-//   selectedCustomer.value = customer;
-// }
-
-// function closeModal() {
-//   selectedCustomer.value = null;
-// }
-
-
-
-
-
-// const destroy = () => {
-//   if (window.confirm("Confirm the deletion of this client")) {
-//     const index = store.customers.findIndex(r => r === selectedCustomer.value);
-//     if (index !== -1) {
-//       store.removeCustomer(index);
-//     }
+function closeModal() {
+    showDetails.value = false;
+  selectedRegistration.value = null;
+}
+const registrations = ref([])
+async function getRegistration() {
+  try {
     
-//     router.push("/list-customer");
-//   }
-// };
+    registrations.value = await store.fetchRegistrations(); 
+    console.log(registrations.value);
+    
+  } catch (error) {
+    console.error("Erreur lors de la récupération des apprenant:", error);
+  }
+}
+
+onMounted(async () => {
+  await getRegistration();
+});
+
+
+
+const destroy = (registration) => {
+    selectedRegistration.value = registration; // Assigner l'administrateur sélectionné
+  if (!selectedRegistration.value) {
+    toast.error("Aucun student sélectionné");
+    return;
+  }
+  if (window.confirm("Confirm the deletion of this student")) {
+    const index = registrations.value.findIndex(registration => registration.id === selectedRegistration.value.id);
+      if (index !== -1) {
+        const registrationId = registrations.value[index].id;
+        store.deleteRegistration(registrationId);
+        registrations.value.splice(index, 1);
+        toast.success("student supprimé avec succès");
+      } else {
+        toast.error("student non trouvé");
+      }
+  }
+};
 </script>
 
 <template >
@@ -55,62 +88,70 @@
     </div>
     
    <div class="container">
-     <table class="table table-bordered">
+    <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">id</th>
-      <th scope="col">Name</th>
-      
-      <th scope="col">Email</th>
-      <th scope="col">Tutor</th>
-      <th scope="col">Phone</th>
-      <th scope="col">status</th>
-      <th scope="col">Adress</th>
+      <th scope="col">ID</th>
+      <th scope="col">Date Register</th>
+      <th scope="col">Start</th>
+      <th scope="col">End</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Module</th>
+      <th scope="col">Student</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row"></th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><button type="button" class="btn btn-primary" @click="openModal(customer)"><i class="fa fa-eye" aria-hidden="true"></i></button> <button type="button" class="btn btn-warning" @click="editCust()"><i class="fa fa-pencil" aria-hidden="true"></i></button>  <button type="button" class="btn btn-danger" @click="destroy"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
-      
+    <tr v-for="(registration, index) in registrations" :key="registration.id">
+      <td>{{ index + 1 }}</td>
+      <td>{{ formatDate(registration.dateRegister) }}</td>
+      <td>{{ formatDate(registration.startDate) }}</td>
+      <td>{{ formatDate(registration.endDate) }}</td>
+      <td>{{ registration.amount }} MRU</td>
+      <td>{{ registration.module ? registration.module.name : 'N/A' }}</td>
+      <td>{{ registration.student ? registration.student.fullName : 'N/A' }}</td>
+      <td>
+        <button type="button" class="btn btn-primary" @click="openModal(registration)">
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-warning" @click="editCust()">
+          <i class="fa fa-pencil" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-danger" @click="destroy(registration)">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
+
    </div>
 
   
-
-   <div class="modal-overlay" v-if="selectedCustomer">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">View Student</h5>
-          <button type="button" class="btn-close"  aria-label="Close" @click="closeModal"><i class="fa fa-times" aria-hidden="true"></i></button>
-        </div>
-        <div class="modal-body">
-          <ul>
-            <li><strong>Student Name :</strong> </li>
-            <li><strong>Address :</strong> </li>
-            <li><strong>Email :</strong> </li>
-            <li><strong>Phone :</strong> </li>
-            <li><strong>module :</strong> </li>
-            <li><strong>Tutor :</strong> </li>
-            <li><strong>Status :</strong> </li>
-        
-          </ul>
-        </div>
-        
-      </div>
+   <div class="modal-overlay" v-if="selectedRegistration">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">View Registration</h5>
+      <button type="button" class="btn-close" aria-label="Close" @click="closeModal">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
     </div>
+    <div class="modal-body">
+      <ul>
+        <li><strong>Student Name :</strong> {{ selectedRegistration.student?.fullName }}</li>
+        <li><strong>Email :</strong> {{ selectedRegistration.student?.email }}</li>
+        <li><strong>Module Name :</strong> {{ selectedRegistration.module?.name }}</li>
+        <li><strong>Module Duration :</strong> {{ selectedRegistration.module?.duration }}</li>
+        <li><strong>Module Price :</strong> {{ selectedRegistration.module?.price }} MRU</li>
+        <li><strong>Status :</strong> {{ selectedRegistration.status }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
- <AddCustomer v-if="add" :add="add" @close="add = false" />
- <EditCustomer v-if="editC" :editC="editC" @close="editC = false" />
+
+ <AddRegister v-if="add" :add="add" @close="add = false" />
+ <EditRegister v-if="editC" :editC="editC" @close="editC = false" />
 </template>
 
 <style scoped>

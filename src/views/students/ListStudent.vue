@@ -3,13 +3,13 @@
 import { useRouter } from 'vue-router';
 const router = useRouter()
 
-import { useGestionStore } from '../../store/gestionStudent'
+import { useGestionStudentStore } from '../../store/gestionStudent'
 import { onMounted, ref } from 'vue';
 const students = ref([])
 import EditStudent from '../students/EditStudent.vue'
 import AddStudent from '../students/AddStudent.vue'
 import { useToast } from 'vue-toastification';
-const store = useGestionStore()
+const store = useGestionStudentStore()
 const showDetails = ref(false);
 const selectedStudent = ref(null);
 const add = ref(false)

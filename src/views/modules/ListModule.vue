@@ -2,7 +2,7 @@
 
 import { useRouter } from 'vue-router';
 const router = useRouter()
-import { useGestionStore } from '../../store/gestionModule';
+import { useGestionModuleStore } from '../../store/gestionModule';
 import { onMounted, ref } from 'vue';
 import EditModule from './EditModule.vue';
 import AddModule from './AddModule.vue';
@@ -10,7 +10,7 @@ import { useToast } from 'vue-toastification';
 
 
 
-const store = useGestionStore()
+const store = useGestionModuleStore()
 
 const showDetails = ref(false);
 const selectedModule = ref(null);

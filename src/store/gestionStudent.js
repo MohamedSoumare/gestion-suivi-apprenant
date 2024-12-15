@@ -2,7 +2,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 
 
-export const useGestionStore = defineStore("gestion", {
+export const useGestionStudentStore = defineStore("gestionStudent", {
     state: () => ({
       students: [],
       searchQuery: "",

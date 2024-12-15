@@ -70,9 +70,9 @@ import { useRouter } from 'vue-router';
 
 
 import { ref } from 'vue';
-import { useGestionStore } from '../../store/gestionModule';
+import { useGestionModuleStore } from '../../store/gestionModule';
 
-const store = useGestionStore()
+const store = useGestionModuleStore()
 const router = useRouter()
 
 
