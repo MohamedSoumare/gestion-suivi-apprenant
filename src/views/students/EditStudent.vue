@@ -7,14 +7,14 @@
           
         </div>
         <div class="modal-body">
-            <form @submit.prevent="onSubmit">
+          <form @submit.prevent="onSubmit">
       <div class="mb-3">
         <label for="name" class="form-label">Student Name</label>
         <input
           type="text"
           class="form-control"
           id="name"
-          
+          v-model="newStudent.fullName"
           required
         />
       </div>
@@ -24,7 +24,7 @@
         <input type="text"
           class="form-control"
           id="email"
-         
+         v-model="newStudent.email"
           required
         >
       </div>
@@ -33,7 +33,7 @@
         <input type="text"
           class="form-control"
           id="phone"
-         
+         v-model="newStudent.phoneNumber"
           required
         >
       </div>
@@ -42,7 +42,7 @@
         <input type="text"
           class="form-control"
           id="adress"
-          
+          v-model="newStudent.address"
           required
         >
       </div>
@@ -51,16 +51,17 @@
         <input type="text"
           class="form-control"
           id="tutor"
-          
+          v-model="newStudent.tutor"
           required
         >
       </div>
       <div class="mb-3">
         <label for="status" class="form-label">Status</label>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" v-model="newStudent.status">
   <option selected>Select Status</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+  <option value="ACTIVE">ACTIVE</option>
+  <option value="INACTIVE">INACTIVE</option>
+  <option value="SUSPENDED">SUSPENDED</option>
   
 </select>
       </div>
@@ -84,66 +85,85 @@
     
 </template>
 <script setup>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 
+import { ref,  watch, onMounted } from 'vue';
 
-// import { ref,  watch, onMounted } from 'vue';
+const store = useGestionStore()
+const router = useRouter()
+import { defineProps, defineEmits } from 'vue';
+import { useGestionStore } from '../../store/gestionStudent';
+import { useToast } from 'vue-toastification';
 
-// const store = useGestionStore()
-// const router = useRouter()
-// import { defineProps, defineEmits } from 'vue';
+const props = defineProps({
+  add: Boolean
+});
 
-// const props = defineProps({
-//   add: Boolean
-// });
+const emit = defineEmits(['close', "studentAdded"]);
 
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
-
-
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
+function closeModal() {
+  emit('close'); 
+}
 
 
-// const editCustomer = (customer) => {
+const newStudent = ref({ fullName: "", email: "", address: "", tutor: "", status: "", phoneNumber: null , });
+const toast = useToast()
+
+const editStudent = (student) => {
   
-//     isEditing.value = true;
-//     newCustomer.value = { ...customer };
+    
+    newStudent.value = { ...student };
     
   
-// };
+};
 
-// onMounted(() => {
-//   if (store.currentIndex !== null && store.currentIndex >= 0 && store.currentIndex < store.customers.length) {
-//     editCustomer(store.customers[store.currentIndex]);
-//   }
-// });
+onMounted(() => {
+  if (store.currentIndex !== null && store.currentIndex >= 0 && store.currentIndex < store.students.length) {
+    editStudent(store.students[store.currentIndex]);
+  }
+});
 
-// watch(() => store.currentIndex, (newIndex) => {
-//   if (newIndex !== null && newIndex >= 0 && newIndex < store.customers.length) {
-//     editCustomer(store.customers[newIndex]);
-//   }
-// });
+  watch(() => store.currentIndex, (newIndex) => {
+    if (newIndex !== null && newIndex >= 0 && newIndex < store.students.length) {
+      editStudent(store.students[newIndex]);
+    }
+  });
 
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
+const resetForm = () => {
+    newStudent.value =  ref({ fullName: "", email: "", address: "", tutor: "", status: "", phoneNumber: null , });
+}
 
-// const onSubmit = () => {
-//     store.editCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
+const onSubmit = async () => {
+  try {
+    console.log(newStudent.value.id);
+    
+    
+    
 
-// }
+    await store.updateStudent(newStudent.value.id, 
+      {
+        fullName: newStudent.value.fullName,
+      email: newStudent.value.email,
+      address: newStudent.value.address,
+      phoneNumber: newStudent.value.phoneNumber,
+      tutor: newStudent.value.tutor,
+      status: newStudent.value.status,
+      
+      }
+    );
+
+    toast.success("Student modifié avec succès");
+    resetForm();
+    closeModal();
+    emit("studentAdded")
+  } catch (error) {
+    if (error.response && error.response.data.errors) {
+      serverErrors.value = error.response.data.errors;
+    }
+    toast.error("Erreur lors de la mise à jour de l'Student : " + error.message);
+  }
+};
 
 
 </script>

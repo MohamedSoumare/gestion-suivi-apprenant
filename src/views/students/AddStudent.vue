@@ -13,7 +13,7 @@
           type="text"
           class="form-control"
           id="name"
-          
+          v-model="newStudent.fullName"
           required
         />
       </div>
@@ -23,7 +23,7 @@
         <input type="text"
           class="form-control"
           id="email"
-         
+         v-model="newStudent.email"
           required
         >
       </div>
@@ -32,7 +32,7 @@
         <input type="text"
           class="form-control"
           id="phone"
-         
+         v-model="newStudent.phoneNumber"
           required
         >
       </div>
@@ -41,7 +41,7 @@
         <input type="text"
           class="form-control"
           id="adress"
-          
+          v-model="newStudent.address"
           required
         >
       </div>
@@ -50,16 +50,17 @@
         <input type="text"
           class="form-control"
           id="tutor"
-          
+          v-model="newStudent.tutor"
           required
         >
       </div>
       <div class="mb-3">
         <label for="status" class="form-label">Status</label>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" v-model="newStudent.status">
   <option selected>Select Status</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+  <option value="ACTIVE">ACTIVE</option>
+  <option value="INACTIVE">INACTIVE</option>
+  <option value="SUSPENDED">SUSPENDED</option>
   
 </select>
       </div>
@@ -83,48 +84,58 @@
     
 </template>
 <script setup>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 
 
-// import { ref } from 'vue';
+import { ref } from 'vue';
+import { useGestionStore } from '../../store/gestionStudent';
 
-// const store = useGestionStore()
-// const router = useRouter()
-
-
-// import { defineProps, defineEmits } from 'vue';
-
-// const props = defineProps({
-//   add: Boolean
-// });
-
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
+const store = useGestionStore()
+const router = useRouter()
 
 
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
+import { defineProps, defineEmits } from 'vue';
+import { useToast } from 'vue-toastification';
+const toast = useToast()
+const props = defineProps({
+  add: Boolean
+});
+
+const emit = defineEmits(['close', "studentAdded"]);
+
+function closeModal() {
+  emit('close'); 
+}
+
+
+ const newStudent = ref({ fullName: "", email: "", address: "", tutor: "", status: "", phoneNumber: null , });
 
 
 
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-// const onSubmit = () => {
-//     store.addCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
+ const resetForm = () => {
+  newStudent.value = {
+    fullName: "",
+    email: "",
+    address: "",
+    tutor: "",
+    status: "",
+    phoneNumber: ""
+  };
+};
 
-// }
+const onSubmit = () => {
+  console.log(newStudent.value); // Affiche correctement les données de l'étudiant
+
+  store.addStudent(
+    newStudent.value
+  );
+  toast.success("Student added successfully !");
+  resetForm();
+
+  closeModal();
+  emit("studentAdded")
+};
 
 
 </script>

@@ -1,48 +1,75 @@
 <script setup>
 
-// import { useRouter } from 'vue-router';
-// const router = useRouter()
-// import { useGestionStore } from '../../store/gestion';
-// import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
-// import EditCustomer from './EditCustomer.vue';
-// import AddCustomer from './AddCustomer.vue';
+import { useGestionStore } from '../../store/gestionStudent'
+import { onMounted, ref } from 'vue';
+const students = ref([])
+import EditStudent from '../students/EditStudent.vue'
+import AddStudent from '../students/AddStudent.vue'
+import { useToast } from 'vue-toastification';
+const store = useGestionStore()
+const showDetails = ref(false);
+const selectedStudent = ref(null);
+const add = ref(false)
+const editC = ref(false)
+const toast =useToast()
+function editCust(){
+  editC.value = true
+}
+const viewDetails = (student) => {
+  selectedStudent.value = student;
+  showDetails.value = true;
+};
 
-// const store = useGestionStore()
+function newCust(){
+  add.value = true
+}
+function openModal(student) {
+  selectedStudent.value = student;
+}
 
-// const selectedCustomer = ref(null);
-// const add = ref(false)
-// const editC = ref(false)
+function closeModal() {
+    showDetails.value = false;
+  selectedStudent.value = null;
+}
 
-// function editCust(){
-//   editC.value = true
-// }
-
-// function newCust(){
-//   add.value = true
-// }
-// function openModal(customer) {
-//   selectedCustomer.value = customer;
-// }
-
-// function closeModal() {
-//   selectedCustomer.value = null;
-// }
-
-
-
-
-
-// const destroy = () => {
-//   if (window.confirm("Confirm the deletion of this client")) {
-//     const index = store.customers.findIndex(r => r === selectedCustomer.value);
-//     if (index !== -1) {
-//       store.removeCustomer(index);
-//     }
+async function getStudent() {
+  try {
     
-//     router.push("/list-customer");
-//   }
-// };
+    students.value = await store.fetchStudents(); 
+    console.log(students.value);
+    
+  } catch (error) {
+    console.error("Erreur lors de la récupération des apprenant:", error);
+  }
+}
+
+onMounted(async () => {
+  await getStudent();
+});
+
+
+
+const destroy = (student) => {
+    selectedStudent.value = student; // Assigner l'administrateur sélectionné
+  if (!selectedStudent.value) {
+    toast.error("Aucun student sélectionné");
+    return;
+  }
+  if (window.confirm("Confirm the deletion of this student")) {
+    const index = students.value.findIndex(student => student.id === selectedStudent.value.id);
+      if (index !== -1) {
+        const studentId = students.value[index].id;
+        store.deleteStudent(studentId);
+        students.value.splice(index, 1);
+        toast.success("student supprimé avec succès");
+      } else {
+        toast.error("student non trouvé");
+      }
+  }
+};
 </script>
 
 <template >
@@ -51,7 +78,7 @@
         <h2>List of Students</h2>
     </div>
     <div class="container d-flex justify-content-end mb-2">
-        <button class="btn btn-info" @click="newCust()"><i class="fa fa-user-plus" aria-hidden="true" ></i> Add New Customer</button>
+        <button class="btn btn-info" @click="newCust()"><i class="fa fa-user-plus" aria-hidden="true" ></i> Add New Student</button>
     </div>
     
    <div class="container">
@@ -70,15 +97,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row"></th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><button type="button" class="btn btn-primary" @click="openModal(customer)"><i class="fa fa-eye" aria-hidden="true"></i></button> <button type="button" class="btn btn-warning" @click="editCust()"><i class="fa fa-pencil" aria-hidden="true"></i></button>  <button type="button" class="btn btn-danger" @click="destroy"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+    <tr  v-for="(student, index) in students" :key="student.id">
+      
+      <td>{{ index + 1 }}</td>
+      <td>{{ student.name }}</td>
+      <td>{{ student.email }}</td>
+      <td>{{ student.tutor }}</td>
+      <td>{{ student.phoneNumber }}</td>
+      <td>{{ student.status }}</td>
+      <td><button type="button" class="btn btn-primary" @click="viewDetails(student)"><i class="fa fa-eye" aria-hidden="true"></i></button> <button type="button" class="btn btn-warning" @click="editCust()"><i class="fa fa-pencil" aria-hidden="true"></i></button>  <button type="button" class="btn btn-danger" @click="destroy(st)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
       
     </tr>
   </tbody>
@@ -87,7 +114,7 @@
 
   
 
-   <div class="modal-overlay" v-if="selectedCustomer">
+   <div class="modal-overlay" v-if="showDetails">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">View Student</h5>
@@ -95,13 +122,13 @@
         </div>
         <div class="modal-body">
           <ul>
-            <li><strong>Student Name :</strong> </li>
-            <li><strong>Address :</strong> </li>
-            <li><strong>Email :</strong> </li>
-            <li><strong>Phone :</strong> </li>
-            <li><strong>module :</strong> </li>
-            <li><strong>Tutor :</strong> </li>
-            <li><strong>Status :</strong> </li>
+            <li><strong>Student Name :</strong> {{ selectedStudent.name }}</li>
+            <li><strong>Address :</strong>  {{ selectedStudent.address }} </li>
+            <li><strong>Email :</strong>  {{ selectedStudent.email }} </li>
+            <li><strong>Phone :</strong>  {{ selectedStudent.phoneNumber }} </li>
+            
+            <li><strong>Tutor :</strong>  {{ selectedStudent.tutor }} </li>
+            <li><strong>Status :</strong>  {{ selectedStudent.status }} </li>
         
           </ul>
         </div>
@@ -109,8 +136,8 @@
       </div>
     </div>
 
- <AddCustomer v-if="add" :add="add" @close="add = false" />
- <EditCustomer v-if="editC" :editC="editC" @close="editC = false" />
+ <AddStudent v-if="add" :add="add" @close="add = false" @studentAdded="getStudent()" />
+ <EditStudent v-if="editC" :editC="editC" @close="editC = false" @studentAdded="getStudent()" />
 </template>
 
 <style scoped>
