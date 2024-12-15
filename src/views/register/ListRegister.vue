@@ -57,15 +57,15 @@ onMounted(async () => {
 });
 
 
-
+const selectedRegistre = ref(null)
 const destroy = (registration) => {
-    selectedRegistration.value = registration; // Assigner l'administrateur sélectionné
-  if (!selectedRegistration.value) {
+    selectedRegistre.value = registration; // Assigner l'administrateur sélectionné
+  if (!selectedRegistre.value) {
     toast.error("Aucun student sélectionné");
     return;
   }
   if (window.confirm("Confirm the deletion of this student")) {
-    const index = registrations.value.findIndex(registration => registration.id === selectedRegistration.value.id);
+    const index = registrations.value.findIndex(registration => registration.id === selectedRegistre.value.id);
       if (index !== -1) {
         const registrationId = registrations.value[index].id;
         store.deleteRegistration(registrationId);
@@ -150,8 +150,8 @@ const destroy = (registration) => {
 </div>
 
 
- <AddRegister v-if="add" :add="add" @close="add = false" />
- <EditRegister v-if="editC" :editC="editC" @close="editC = false" />
+ <AddRegister v-if="add" :add="add" @close="add = false" @registrationAdded="getRegistration()" />
+ <EditRegister v-if="editC" :editC="editC" @close="editC = false" @registrationAdded="getRegistration()" />
 </template>
 
 <style scoped>

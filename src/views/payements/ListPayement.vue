@@ -1,48 +1,5 @@
 <script setup>
 
-// import { useRouter } from 'vue-router';
-// const router = useRouter()
-// import { useGestionStore } from '../../store/gestion';
-// import { ref } from 'vue';
-
-// import EditCustomer from './EditCustomer.vue';
-// import AddCustomer from './AddCustomer.vue';
-
-// const store = useGestionStore()
-
-// const selectedCustomer = ref(null);
-// const add = ref(false)
-// const editC = ref(false)
-
-// function editCust(){
-//   editC.value = true
-// }
-
-// function newCust(){
-//   add.value = true
-// }
-// function openModal(customer) {
-//   selectedCustomer.value = customer;
-// }
-
-// function closeModal() {
-//   selectedCustomer.value = null;
-// }
-
-
-
-
-
-// const destroy = () => {
-//   if (window.confirm("Confirm the deletion of this client")) {
-//     const index = store.customers.findIndex(r => r === selectedCustomer.value);
-//     if (index !== -1) {
-//       store.removeCustomer(index);
-//     }
-    
-//     router.push("/list-customer");
-//   }
-// };
 </script>
 
 <template >

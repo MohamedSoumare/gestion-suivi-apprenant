@@ -48,7 +48,7 @@
             >
               <option value="" disabled>Select Student</option>
               <option v-for="student in students" :key="student.id" :value="student.id">
-                {{ student.fullName }}
+                {{ student.name }}
               </option>
             </select>
           </div>
