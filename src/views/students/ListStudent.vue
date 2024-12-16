@@ -105,6 +105,7 @@ const destroy = (student) => {
       <td>{{ student.tutor }}</td>
       <td>{{ student.phoneNumber }}</td>
       <td>{{ student.status }}</td>
+      <td>{{ student.address }}</td>
       <td><button type="button" class="btn btn-primary" @click="viewDetails(student)"><i class="fa fa-eye" aria-hidden="true"></i></button> <button type="button" class="btn btn-warning" @click="editCust()"><i class="fa fa-pencil" aria-hidden="true"></i></button>  <button type="button" class="btn btn-danger" @click="destroy(st)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
       
     </tr>

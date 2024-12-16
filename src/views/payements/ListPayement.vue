@@ -160,9 +160,9 @@ const destroy = (payment) => {
             <li><strong>Payer :</strong>{{ selectedPayment.payer }} </li>
             <li><strong>Payer Number :</strong> {{ selectedPayment.payerNumber }}</li>
             <li><strong>Payer Mode :</strong> {{ selectedPayment.paymentMode }}</li>
-            <li><strong>Module :</strong> {{ selectedPayment.module ? selectedPayment.module.name : 'N/A' }}</li>
-            <li><strong>Student :</strong> {{ selectedPayment.student ? selectedPayment.student.name : 'N/A' }}</li>
-            <li><strong>Registration :</strong> {{ selectedPayment.registration ? selectedPayment.registration.name : 'N/A' }}</li>
+            <li><strong>Module :</strong> {{ selectedPayment.module  }}</li>
+            <li><strong>Student :</strong> {{ selectedPayment.student  }}</li>
+            <li><strong>Registration :</strong> {{ selectedPayment.registration }}</li>
         
           </ul>
         </div>
