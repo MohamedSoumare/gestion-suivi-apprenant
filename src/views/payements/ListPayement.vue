@@ -96,7 +96,7 @@ const destroy = (payment) => {
         </h2>
     </div>
     <div class="container d-flex justify-content-end mb-2">
-        <button class="btn btn-info" @click="newCust()"><i class="fa fa-user-plus" aria-hidden="true" ></i> Add New Payement</button>
+        <button class="btn btn-info" @click="newCust()"><i class="fa fa-plus" aria-hidden="true" ></i> Add New Payement</button>
     </div>
     
    <div class="container">
@@ -110,26 +110,37 @@ const destroy = (payment) => {
       <th scope="col">Payement Number</th>
       <th scope="col">Payement Mode</th>
       <th scope="col">Amount</th>
-      <th scope="col">Student</th>
+      
       <th scope="col">Module</th>
+      <th scope="col">Student</th>
+      <th scope="col">Registration</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr v-for="(payment, index) in payments" :key="payment.id">
-      
-      <td>{{ index + 1 }}</td>
-      <td>{{ formatDate(payment.paymentDate) }}</td>
-      <td>{{ payment.amount }} MRU</td>
-      <td>{{ payment.payer }}</td>
-      <td>{{ payment.payerNumber }}</td>
-      <td>{{ payment.paymentMode }}</td>
-      <td>{{ payment.module ? payment.module.name : 'N/A' }}</td>
-      <td>{{ payment.student ? payment.student.name : 'N/A' }}</td>
-      <td>{{ payment.registration ? payment.registration.name : 'N/A' }}</td>
-      <td><button type="button" class="btn btn-primary" @click="openModal(payment)"><i class="fa fa-eye" aria-hidden="true"></i></button> <button type="button" class="btn btn-warning" @click="editCust()"><i class="fa fa-pencil" aria-hidden="true"></i></button>  <button type="button" class="btn btn-danger" @click="destroy(payment)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
-      
-    </tr>
+  <td>{{ index + 1 }}</td>
+  <td>{{ formatDate(payment.paymentDate) }}</td>
+  <td>{{ payment.payer }}</td>
+  <td>{{ payment.payerNumber }}</td>
+  <td>{{ payment.paymentMode }}</td>
+  <td>{{ payment.amount }}</td>
+  <td>{{ payment.module }}</td>
+  <td>{{ payment.student }}</td>
+  <td>{{ payment.registration }}</td>
+  <td>
+    <button type="button" class="btn btn-primary" @click="openModal(payment)">
+      <i class="fa fa-eye" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btn btn-warning" @click="editCust()">
+      <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="btn btn-danger" @click="destroy(payment)">
+      <i class="fa fa-trash" aria-hidden="true"></i>
+    </button>
+  </td>
+</tr>
+
   </tbody>
 </table>
    </div>
