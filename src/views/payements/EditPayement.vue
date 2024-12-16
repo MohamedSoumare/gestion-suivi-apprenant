@@ -1,162 +1,176 @@
 <template>
-
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit customer</h5>
-          
+          <h5 class="modal-title">Edit Payment</h5>
         </div>
         <div class="modal-body">
-            <form @submit.prevent="onSubmit">
-      <div class="mb-3">
-        <label for="date" class="form-label">Payement date</label>
-        <input
-          type="date"
-          class="form-control"
-          id="date"
-          
-          required
-        />
-      </div>
-     
-      <div class="mb-3">
-        <label for="payer" class="form-label">Payer</label>
-        <input type="text"
-          class="form-control"
-          id="payer"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="payernum" class="form-label">Payement Number</label>
-        <input type="text"
-          class="form-control"
-          id="payernum"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="payernum" class="form-label">Payement Mode</label>
-        <input type="text"
-          class="form-control"
-          id="payernum"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="mount" class="form-label">Amount</label>
-        <input type="number"
-          class="form-control"
-          id="mount"
-          
-          required
-        >
-      </div>
-      
-      <div class="mb-3">
-        <label for="student" class="form-label">Student</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Student</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+          <form @submit.prevent="onSubmit">
+            <div class="mb-3">
+              <label for="payer" class="form-label">Payer</label>
+              <input
+                type="text"
+                class="form-control"
+                id="payer"
+                v-model="payment.payer"
+                required
+              />
+            </div>
   
-</select>
-      </div>
-      <div class="mb-3">
-        <label for="module" class="form-label">Module</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Module</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+            <div class="mb-3">
+              <label for="paymentNumber" class="form-label">Payment Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="paymentNumber"
+                v-model="payment.paymentNumber"
+                required
+              />
+            </div>
   
-</select>
-      </div>
-      
-     
-      
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary">
-             Confirm
-          </button>
+            <div class="mb-3">
+              <label for="paymentMode" class="form-label">Payment Mode</label>
+              <input
+                type="text"
+                class="form-control"
+                id="paymentMode"
+                v-model="payment.paymentMode"
+                required
+              />
+            </div>
+  
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount</label>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                v-model="payment.amount"
+                required
+              />
+            </div>
+  
+            <div class="mb-3">
+              <label for="student" class="form-label">Student</label>
+              <select
+                class="form-select"
+                v-model="payment.studentId"
+                required
+              >
+                <option value="" disabled>Select Student</option>
+                <option
+                  v-for="student in students"
+                  :key="student.id"
+                  :value="student.id"
+                >
+                  {{ student.name }}
+                </option>
+              </select>
+            </div>
+  
+            <div class="mb-3">
+              <label for="module" class="form-label">Module</label>
+              <select
+                class="form-select"
+                v-model="payment.moduleId"
+                required
+              >
+                <option value="" disabled>Select Module</option>
+                <option
+                  v-for="module in modules"
+                  :key="module.id"
+                  :value="module.id"
+                >
+                  {{ module.name }}
+                </option>
+              </select>
+            </div>
+  
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="closeModal">
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+          </form>
         </div>
-    </form>
-        </div>
-        
-        
       </div>
     </div>
-    
-</template>
-<script setup>
-// import { useRouter } from 'vue-router';
-
-
-
-// import { ref,  watch, onMounted } from 'vue';
-
-// const store = useGestionStore()
-// const router = useRouter()
-// import { defineProps, defineEmits } from 'vue';
-
-// const props = defineProps({
-//   add: Boolean
-// });
-
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
-
-
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
-
-
-// const editCustomer = (customer) => {
+  </template>
   
-//     isEditing.value = true;
-//     newCustomer.value = { ...customer };
-    
+  <script setup>
+  import { ref, onMounted, watch } from 'vue';
+  import { useToast } from 'vue-toastification';
+  import { defineProps, defineEmits } from 'vue';
+ 
+  import { useGestionStudentStore } from '../../store/gestionStudent';
+  import { useGestionModuleStore } from '../../store/gestionModule';
+import { useGestionPayementStore } from '../../store/gestionPayment';
   
-// };
-
-// onMounted(() => {
-//   if (store.currentIndex !== null && store.currentIndex >= 0 && store.currentIndex < store.customers.length) {
-//     editCustomer(store.customers[store.currentIndex]);
-//   }
-// });
-
-// watch(() => store.currentIndex, (newIndex) => {
-//   if (newIndex !== null && newIndex >= 0 && newIndex < store.customers.length) {
-//     editCustomer(store.customers[newIndex]);
-//   }
-// });
-
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-
-// const onSubmit = () => {
-//     store.editCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
-
-// }
-
-
-</script>
+  const store = useGestionPayementStore();
+  const storeStudent = useGestionStudentStore();
+  const storeModule = useGestionModuleStore();
+  const toast = useToast();
+  
+  const props = defineProps({
+    paymentId: Number,
+    add: Boolean
+  });
+  const emit = defineEmits(['close', 'paymentUpdated']);
+  
+  const payment = ref({
+    payer: '',
+    paymentNumber: '',
+    paymentMode: '',
+    amount: '',
+    studentId: '',
+    moduleId: '',
+  });
+  
+  const editPayment = (paymentData) => {
+    payment.value = { ...paymentData };
+  };
+  
+  onMounted(() => {
+    if (store.currentIndex !== null && store.currentIndex >= 0 && store.currentIndex < store.payements.length) {
+      editPayment(store.payements[store.currentIndex]);
+    }
+  });
+  
+  watch(() => store.currentIndex, (newIndex) => {
+    if (newIndex !== null && newIndex >= 0 && newIndex < store.payements.length) {
+      editPayment(store.payements[newIndex]);
+    }
+  });
+  
+  const students = ref([]);
+  const modules = ref([]);
+  
+  const closeModal = () => {
+    emit('close');
+  };
+  
+  const fetchStudentsAndModules = async () => {
+    students.value = await storeStudent.fetchStudents();
+    modules.value = await storeModule.fetchModules();
+  };
+  
+  const onSubmit = async () => {
+    try {
+      await store.updatePayement(payment.value.id, payment.value);
+      toast.success('Payment updated successfully');
+      closeModal();
+      emit('paymentUpdated');
+    } catch (error) {
+      toast.error('Error updating payment: ' + error.message);
+    }
+  };
+  
+  onMounted(() => {
+    fetchStudentsAndModules();
+  });
+  </script>
+  
 <style scoped>
 #carouselExampleControls .carousel-item img{
   height: 100vh;

@@ -14,10 +14,11 @@ const showDetails = ref(false);
 const selectedRegistration = ref(null);
 const add = ref(false)
 const editC = ref(false)
-const toast =useToast()
+
 function editCust(){
   editC.value = true
 }
+const toast =useToast()
 const viewDetails = (registration) => {
   selectedRegistration.value = registration;
   showDetails.value = true;

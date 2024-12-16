@@ -2,142 +2,172 @@
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Create new Payement</h5>
-          
+          <h5 class="modal-title">Create new Payment</h5>
         </div>
         <div class="modal-body">
-    <form @submit.prevent="onSubmit">
-      <div class="mb-3">
-        <label for="date" class="form-label">Payement date</label>
-        <input
-          type="date"
-          class="form-control"
-          id="date"
-          
-          required
-        />
-      </div>
-     
-      <div class="mb-3">
-        <label for="payer" class="form-label">Payer</label>
-        <input type="text"
-          class="form-control"
-          id="payer"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="payernum" class="form-label">Payement Number</label>
-        <input type="text"
-          class="form-control"
-          id="payernum"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="payernum" class="form-label">Payement mode</label>
-        <input type="text"
-          class="form-control"
-          id="payernum"
-         
-          required
-        >
-      </div>
-      <div class="mb-3">
-        <label for="mount" class="form-label">Amount</label>
-        <input type="number"
-          class="form-control"
-          id="mount"
-          
-          required
-        >
-      </div>
-      
-      <div class="mb-3">
-        <label for="student" class="form-label">Student</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Student</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+          <form @submit.prevent="onSubmit">
+           
   
-</select>
-      </div>
-      <div class="mb-3">
-        <label for="module" class="form-label">Module</label>
-        <select class="form-select" aria-label="Default select example">
-  <option selected>Select Module</option>
-  <option value="1">Actif</option>
-  <option value="2">Inactif</option>
+            <div class="mb-3">
+              <label for="payer" class="form-label">Payer</label>
+              <input
+                type="text"
+                class="form-control"
+                id="payer"
+                v-model="newPayment.payer"
+                required
+              />
+            </div>
   
-</select>
-      </div>
-      
-     
-      
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary">
-             Confirm
-          </button>
+            <div class="mb-3">
+              <label for="payerNumber" class="form-label">Payment Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="payerNumber"
+                v-model="newPayment.payerNumber"
+                required
+              />
+            </div>
+  
+            <div class="mb-3">
+              <label for="paymentMode" class="form-label">Payment Mode</label>
+              <input
+                type="text"
+                class="form-control"
+                id="paymentMode"
+                v-model="newPayment.paymentMode"
+                required
+              />
+            </div>
+  
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount</label>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                v-model="newPayment.amount"
+                required
+              />
+            </div>
+  
+            <div class="mb-3">
+              <label for="student" class="form-label">Student</label>
+              <select
+                class="form-select"
+                v-model="newPayment.studentId"
+                required
+              >
+                <option value="" disabled>Select Student</option>
+                <option v-for="student in students" :key="student.id" :value="student.id">
+                  {{ student.name }}
+                </option>
+              </select>
+            </div>
+  
+            <div class="mb-3">
+              <label for="module" class="form-label">Module</label>
+              <select
+                class="form-select"
+                v-model="newPayment.moduleId"
+                required
+              >
+                <option value="" disabled>Select Module</option>
+                <option v-for="module in modules" :key="module.id" :value="module.id">
+                  {{ module.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="module" class="form-label"> Id of  Registration</label>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                v-model="newPayment.registrationId"
+                required
+              />
+            </div>
+  
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="closeModal">
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Confirm
+              </button>
+            </div>
+          </form>
         </div>
-    </form>
-        </div>
-        
-        
       </div>
     </div>
-    
-</template>
-<script setup>
-// import { useRouter } from 'vue-router';
-
-
-
-// import { ref } from 'vue';
-
-// const store = useGestionStore()
-// const router = useRouter()
-
-
-// import { defineProps, defineEmits } from 'vue';
-
-// const props = defineProps({
-//   add: Boolean
-// });
-
-// const emit = defineEmits(['close']);
-
-// function closeModal() {
-//   emit('close'); 
-// }
-
-
-// const newCustomer = ref({ name: "", address: "", email: "", phone: "" });
-
-
-
-// const resetForm = () => {
-//     newCustomer.value = ref({ name: "", address: "", email: "", phone: "" });
-// }
-// const onSubmit = () => {
-//     store.addCustomer(
-//         store.currentIndex,
-//         newCustomer.value.name,
-//         newCustomer.value.address,
-//         newCustomer.value.email,
-//         newCustomer.value.phone,
-//     )
-//     resetForm()
-//     router.push({ name: 'ListCustomer' });
-
-// }
-
-
-</script>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from 'vue';
+  import { useGestionModuleStore } from '../../store/gestionModule';
+ 
+  import { useToast } from 'vue-toastification';
+  import { useGestionStudentStore } from '../../store/gestionStudent';
+import { useGestionPayementStore } from '../../store/gestionPayment';
+  
+  const storeModule = useGestionModuleStore();
+  const storePayment =  useGestionPayementStore();
+  const toast = useToast();
+  const storeStudent = useGestionStudentStore();
+  
+  const emit = defineEmits(['close', 'paymentAdded']);
+  const students = ref([]);
+  const modules = ref([]);
+  
+  const newPayment = ref({
+    paymentDate: new Date(),
+    payer: '',
+    payerNumber: '',
+    paymentMode: '',
+    amount: null,
+    studentId: null,
+    moduleId: null,
+    registrationId: null
+  });
+  
+  function closeModal() {
+    emit('close');
+  }
+  
+  const resetForm = () => {
+    newPayment.value = {
+      paymentDate: '',
+      payer: '',
+      payerNumber: '',
+      paymentMode: '',
+      amount: null,
+      studentId: null,
+      moduleId: null,
+      registrationId: null
+    };
+  };
+  
+  const onSubmit = () => {
+    console.log(newPayment.value);
+    storePayment.addPayment(newPayment.value);
+    toast.success('Payment added successfully!');
+    resetForm();
+    closeModal();
+    emit('paymentAdded');
+  };
+  
+  const fetchStudentsAndModules = async () => {
+    students.value = await storeStudent.fetchStudents();
+    modules.value = await storeModule.fetchModules();
+    console.log(students.value);
+    console.log(modules.value);
+  };
+  
+  onMounted(fetchStudentsAndModules);
+  </script>
+  
 <style scoped>
 #carouselExampleControls .carousel-item img{
   height: 100vh;

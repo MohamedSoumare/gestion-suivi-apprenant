@@ -38,7 +38,7 @@ export const useGestionPayementStore = defineStore("gestionPayement", {
           },
           async fetchPayements() {
             try {
-              const resp = await axios.get("http://localhost:4000/api/payements");
+              const resp = await axios.get("http://localhost:4000/api/payments");
               return (this.payements = resp.data.map((payement) => ({
                 id: payement.id,
                 paymentDate: payement.paymentDate,
@@ -59,9 +59,9 @@ export const useGestionPayementStore = defineStore("gestionPayement", {
             }
           },
 
-          async addStudent(payementData) {
+          async addPayment(payementData) {
             try {
-              await axios.post("http://localhost:4000/api/payements", payementData);
+              await axios.post("http://localhost:4000/api/payments", payementData);
               
             } catch (error) {
               console.error("Erreur lors de l'ajout du payement : ", error);
@@ -73,7 +73,7 @@ export const useGestionPayementStore = defineStore("gestionPayement", {
 
           async updatePayement(id, data) {
             try {
-              const response = await axios.put(`http://localhost:4000/api/payements/${id}`, data,);
+              const response = await axios.put(`http://localhost:4000/api/payments/${id}`, data,);
               console.log("Payement mis à jour avec succès :", response.data);
               return response.data;
             } catch (error) {
@@ -89,7 +89,7 @@ export const useGestionPayementStore = defineStore("gestionPayement", {
       
           async deletePayement(id) {
             try {
-              await axios.delete(`http://localhost:4000/api/payements/${id}`);
+              await axios.delete(`http://localhost:4000/api/payments/${id}`);
               // Optionnel : Mettez à jour la liste des utilisateurs si elle est gérée globalement
               this.payements = this.payements.filter((payement) => payement.id !== id);
             } catch (error) {
