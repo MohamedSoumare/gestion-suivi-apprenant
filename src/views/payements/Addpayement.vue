@@ -32,13 +32,13 @@
   
             <div class="mb-3">
               <label for="paymentMode" class="form-label">Payment Mode</label>
-              <input
-                type="text"
-                class="form-control"
-                id="paymentMode"
-                v-model="newPayment.paymentMode"
-                required
-              />
+              <select class="form-select" aria-label="Default select example" v-model="newPayment.paymentMode">
+  <option selected>Select Mode</option>
+  <option value="CARD">CARD</option>
+  <option value="BANK_TRANSFER">BANK_TRANSFER</option>
+  <option value="CASH">CASH</option>
+  
+</select>
             </div>
   
             <div class="mb-3">
