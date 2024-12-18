@@ -77,6 +77,7 @@ import { useGestionModuleStore } from '../../store/gestionModule';
 import { useToast } from 'vue-toastification';
 
 const props = defineProps({
+    moduleId: Number,
   add: Boolean
 });
 
@@ -90,10 +91,10 @@ function closeModal() {
 const newModule = ref({ name: "", duration: "", price: null, status: "" });
 const toast = useToast()
 
-const editModule = (module) => {
+const editModule = (mod) => {
   
     
-    newModule.value = { ...module };
+    newModule.value = { ...mod };
     
   
 };

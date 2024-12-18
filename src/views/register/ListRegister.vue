@@ -142,7 +142,7 @@ const destroy = (registration) => {
         <li><strong>Student Name :</strong> {{ selectedRegistration.student?.fullName }}</li>
         <li><strong>Email :</strong> {{ selectedRegistration.student?.email }}</li>
         <li><strong>Module Name :</strong> {{ selectedRegistration.module?.name }}</li>
-        <li><strong>Module Duration :</strong> {{ selectedRegistration.module?.duration }}</li>
+        <li><strong>Module Duration :</strong> {{ selectedRegistration.module?.duration }} jours</li>
         <li><strong>Module Price :</strong> {{ selectedRegistration.module?.price }} MRU</li>
         <li><strong>Status :</strong> {{ selectedRegistration.status }}</li>
       </ul>

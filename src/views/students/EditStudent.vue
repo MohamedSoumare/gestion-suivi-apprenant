@@ -14,7 +14,7 @@
           type="text"
           class="form-control"
           id="name"
-          v-model="newStudent.fullName"
+          v-model="newStudent.name"
           required
         />
       </div>
@@ -107,7 +107,7 @@ function closeModal() {
 }
 
 
-const newStudent = ref({ fullName: "", email: "", address: "", tutor: "", status: "", phoneNumber: null , });
+const newStudent = ref({ name: "", email: "", address: "", tutor: "", status: "", phoneNumber: null , });
 const toast = useToast()
 
 const editStudent = (student) => {
