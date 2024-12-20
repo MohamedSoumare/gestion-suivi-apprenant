@@ -22,8 +22,8 @@ Avant de commencer l'installation et l'exécution de ce projet, assurez-vous d'a
 1. Clonez le dépôt :
 
    ```bash
-   git clone https://github.com/semthillo/Student-Manager.git
-   cd Student-Manager
+   git clone https://github.com/MohamedSoumare/gestion-suivi-apprenant.git
+   cd gestion-suivi-apprenant.git
    ```
 
 2. Installez les dépendances :
@@ -46,9 +46,5 @@ Avant de commencer l'installation et l'exécution de ce projet, assurez-vous d'a
 - Gestion des Payements : Ajouter, modifier et supprimer des payement.
 
 ## Auteur
-
-[semThillo](https://github.com/semthillo)
-
-[MohamedAbdallah](https://github.com/Mohamed11abdallah)
 
 [MohamedSoumare](https://github.com/MohamedSoumare)
